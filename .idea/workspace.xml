@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a319858e-9ce4-44f3-893b-b4679f661680" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/breath-of-wild/src/GameLogic/TempData/Location.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/breath-of-wild/src/GameLogic/TempData/Terrain.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/breath-of-wild/src/GameLogic/TempData/Location.json" beforeDir="false" afterPath="$PROJECT_DIR$/breath-of-wild/src/GameLogic/TempData/Location.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/breath-of-wild/src/GameLogic/TempData/Species.json" beforeDir="false" afterPath="$PROJECT_DIR$/breath-of-wild/src/GameLogic/TempData/Species.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +57,7 @@
       <updated>1663068902303</updated>
       <workItem from="1663068903682" duration="266000" />
       <workItem from="1663069205417" duration="738000" />
-      <workItem from="1663069989833" duration="661000" />
+      <workItem from="1663069989833" duration="1423000" />
     </task>
     <servers />
   </component>

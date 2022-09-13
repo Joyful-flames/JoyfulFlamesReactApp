@@ -12,9 +12,23 @@
     "waterConsume": 0,
     "nutritionConsume": -1
   },
+  "conditions": {
+    "temp": {
+      "minTemp": -20,
+      "suitableLowTemp": -15,
+      "suitableHighTemp": 30,
+      "maxTemp": 50
+    },
+    "wind": {
+      "minWind": 0,
+      "maxWind": 99
+    },
+    "terrainID": 0
+  },
+
   "info": {
     "species": "testSpecies",
     "name": "testName",
-    "introduction": "EMPTY_INFO"
+    "description": "EMPTY_INFO"
   }
 }
