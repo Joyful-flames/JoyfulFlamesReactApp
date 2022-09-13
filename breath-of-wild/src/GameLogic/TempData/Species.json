@@ -1,0 +1,20 @@
+{
+  "specieId": 0,
+  "commonName": "TestComName",
+  "property": {
+    "tier": 0,
+    "matureStage": 1,
+    "maturePercentage": 99,
+    "growthRate": 1,
+    "crowedRange": 1,
+    "crowedRate": 1,
+    "spreadRange": 1,
+    "waterConsume": 0,
+    "nutritionConsume": -1
+  },
+  "info": {
+    "species": "testSpecies",
+    "name": "testName",
+    "introduction": "EMPTY_INFO"
+  }
+}
