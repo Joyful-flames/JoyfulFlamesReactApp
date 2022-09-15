@@ -20,8 +20,14 @@ function placePlantOnMatrix(xCord, yCord, plantSpecie) {
 }
 
 async function printMatrix(board) {
-    // board.map(roll => roll.map(colum => console.log(colum)))
-    board.map(colum)
+    printString = ""
+    board.map(row => row.map(function (column){
+        printString += "["
+        if (column instanceof Plant.Plant){
+            printString += column.
+        }
+        printString += "]"
+    }))
 }
 
 

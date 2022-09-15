@@ -22,8 +22,18 @@ const testPlantSpecie = {
 
 const growthSpeedModifier = 1
 
-
+/** Plant class
+ *
+ */
 class Plant {
+    /** the class constructor
+     *
+     * @param {Number} xCord
+     * @param {Number} yCord
+     * @param {Array[JSON]} plantSpecie
+     * @param {Number} stage
+     * @param {Number} percentage
+     */
     constructor(xCord, yCord, plantSpecie, stage = 0, percentage = 0) {
         // basic stats
         this.xCord = xCord
@@ -42,10 +52,17 @@ class Plant {
         this.waterConsume = plantSpecie.property.waterConsume
         this.nutritionCosume = plantSpecie.property.nutritionConsume
 
+        // specie info
+        this.name = plantSpecie.info.name
+
     }
 
-    grow() {
-        this.percentage += this.growthRate * growthSpeedModifier
+    /** This method used to add growth stats of a plant based on given cycle number.
+     *
+     * @param {Number} cycle
+     */
+    grow(cycle = 1) {
+        this.percentage += this.growthRate * growthSpeedModifier * cycle
 
         if (this.percentage > 99) {
             if (this.stage <= this.tier) {
