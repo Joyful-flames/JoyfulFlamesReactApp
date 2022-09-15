@@ -35,4 +35,4 @@ function gameLogic(board, location_id) {
     console.log(locationSpecies)
 }
 
-module.exports = {gameLogic}
+module.exports = {gameLogic, getSpeciesByID, getLocationByID}
