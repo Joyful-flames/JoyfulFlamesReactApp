@@ -1,5 +1,4 @@
 const Plant = require("./Plant")
-const board = []
 
 const xWindShift = 1
 const yWindShift = 1
@@ -8,33 +7,22 @@ function blankBoard(width = 1, height = 1,) {
     return Array(width * height).fill(null)
 }
 
-function placePlant(xCord, yCord, plantSpecie) {
-    const index = xCord * yCord
-    board.splice(index, 1, new Plant.Plant(xCord, yCord, plantSpecie))
+function blankMatrix(width = 1, height = 1,) {
+    return Array(height).fill(null).map(item => item = Array(width).fill(null))
 }
 
-async function printBoard() {
-    for (const index in board) {
-        if (board[index] == null) {
-            // console.log(' null ')
-        } else {
-            console.log(board[index].percentage)
-        }
-    }
+function placePlantOnBoard(xCord, yCord, plantSpecie) {
+    board.splice(xCord * yCord, 1, new Plant.Plant(xCord, yCord, plantSpecie))
 }
 
-// Work in progress
-function cellInRange (xCord, yCord, boardWidth, boardHeight, range = 1) {
-    // cut board coordinate with square
-    const xStart = xCord - range
-    const yStart = yCord - range
-    const xEnd = xCord + range
-    const yEnd = xCord + range
+function placePlantOnMatrix(xCord, yCord, plantSpecie) {
+    board[yCord].splice(xCord, 1, new Plant.Plant(xCord, yCord, plantSpecie))
+}
 
-    // matrix board
-    let matrix = Array(boardWidth)
-
+async function printMatrix(board) {
+    // board.map(roll => roll.map(colum => console.log(colum)))
+    board.map(colum)
 }
 
 
-module.exports = {blankBoard, placePlant, printBoard}
+module.exports = {blankBoard, placePlantOnBoard, printMatrix, blankMatrix, placePlantOnMatrix}

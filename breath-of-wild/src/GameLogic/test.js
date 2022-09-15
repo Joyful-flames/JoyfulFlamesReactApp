@@ -1,14 +1,7 @@
 const Board = require("./Board")
 const Plant = require("./Plant")
+const GameLogic = require("./GameLogic")
+const Location = require("./TempData/Location.json")
+const Species = require("./TempData/Species.json")
 
-boardWidth = 5
-boardHeight = 5
-
-board = Board.blankBoard(boardWidth, boardHeight)
-
-// console.log(board)
-
-Board.placePlant(Math.round(boardWidth / 2), Math.round(boardHeight / 2), Plant.testPlantSpecie)
-
-// console.log(board)
-Board.printBoard().then()
+GameLogic.gameLogic("0")

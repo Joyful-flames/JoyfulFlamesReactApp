@@ -1,7 +1,22 @@
 {
-  "locID": 0,
-  "continent": "Oceania",
-  "region": "Queensland",
-  "climateID": 0,
-  "speciesID": 0
+  "0": {
+    "locID": "0",
+    "continent": "Oceania",
+    "region": "Queensland",
+    "climateID": 0,
+    "speciesID": [
+      "0",
+      "1"
+    ]
+  },
+  "1": {
+    "locID": "1",
+    "continent": "Oceania",
+    "region": "NSW",
+    "climateID": 0,
+    "speciesID": [
+      "0",
+      "1"
+    ]
+  }
 }

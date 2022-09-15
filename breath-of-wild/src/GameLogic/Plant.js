@@ -69,6 +69,13 @@ class Plant {
 
     frameLogic() {
         this.grow()
+
+        const mature = this.isMature()
+        const crowed = this.isCrowed()
+
+        if (mature && (!crowed)) {
+            this.spread()
+        }
     }
 }
 
