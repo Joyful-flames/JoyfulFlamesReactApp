@@ -3,54 +3,52 @@ const Plant = require("./Plant")
 const GameLogic = require("./GameLogic")
 const Location = require("./TempData/Location.json")
 const Species = require("./TempData/Species.json")
-const {matrixMarker} = require("./Board");
+const {matrixMarker, printMatrix} = require("./Board");
 
-// GameLogic.gameLogic("0")
-
-// console.log(new Plant.Plant(0,0,Species["0"]))
-
-/*
-var board = blankMatrix(3,3)
-Board.printMatrix(board)
-
-Board.placePlantOnMatrix(board,[1,1], new Plant.Plant(1,1, Species[0]))
-Board.printMatrix(board)*/
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
 }
 
-async function test(board, location_id) {
+async function test(matrix, location_id) {
 
-    const run = 100
+    const run = 200
     var counter = 0
 
     var locationData = GameLogic.getLocationByID(location_id, Location)
     var locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
 
-    Board.printMatrix(board)
-    Board.placePlantOnMatrix(board, [1, 1], new Plant.Plant(1, 1, Species[0]))
+    // const testPlantPos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
+
+    const testPlantPos = [[1, 1], [0, 1]]
+    // console.log(locationData)
+    // console.log(locationSpecies)
+
+    testPlantPos.map(coordinate => Board.placePlantOnMatrix(matrix, coordinate, new Plant.Plant([1, 1], Species[0])))
+    Board.printMatrix(matrix)
 
     while (counter < run) {
-
-        board.map(row => row.map(function (colum) {
+        console.log("Counter:", counter)
+        matrix.map(row => row.map(function (colum) {
             if (colum instanceof Plant.Plant) {
-                colum.frameLogic()
+                colum.frameLogic(matrix)
             }
         }))
-        Board.printMatrix(board).then()
+        if (counter % 10 === 0) {
+            Board.printMatrix(matrix).then()
+        }
+
 
         counter++
         await sleep(100);
-
     }
 }
 
-const a = Board.blankMatrix(10,10)
-const c = Board.getCircleCordByCenter(a,5,5,4)
-console.log(c.includes([5,3]))
+/*const a = Board.blankMatrix(5,5)
+Board.placePlantOnMatrix(a,[1,1], new Plant.Plant(1,1, Species[0]))
+printMatrix(a)
+console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadRange)))*/
 
-matrixMarker(a,c)
 
-//test(Board.blankMatrix(5, 5), "0")
+test(Board.blankMatrix(5, 5), "0")

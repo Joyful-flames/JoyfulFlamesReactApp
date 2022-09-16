@@ -5,7 +5,7 @@ const Species = require("./TempData/Species.json");
  *
  * @param {Number} width
  * @param {Number} height
- * @return {any[][]} blank matrix
+ * @return {any[null][null]} blank matrix
  */
 function blankMatrix(width = 1, height = 1,) {
     return Array(height).fill(null).map(item => item = Array(width).fill(null))
@@ -56,40 +56,6 @@ function boundaryLimiter(boundary, num) {
     }
 }
 
-/** This function use to get the coordinates within a circle based on given radius and board.
- *
- * @param {Array} board
- * @param {Number} centerX
- * @param {Number} centerY
- * @param {Number} radius
- * @return {Array} coordinates
- */
-function getCircleCordByCenter(board, centerX, centerY, radius) {
-
-    const xBound = board[0].length
-    const yBound = board.length
-
-    const xRange = [centerX - radius, centerX + radius].map(cord => boundaryLimiter(xBound, cord))
-    const yRange = [centerY - radius, centerY + radius].map(cord => boundaryLimiter(yBound, cord))
-    console.log(xBound, yBound)
-    var cordInRadius = []
-
-    board.map(function (row) {
-        var postInBoard = board.indexOf(row)
-        if (yRange[1] >= postInBoard && yRange[0] <= postInBoard) {
-            for (var postInRow = xRange[0]; postInRow <= xRange[1]; postInRow++) {
-                // Get the distance from center to current position,
-                // push coordinates if the distance is smaller than radius.
-                if (Math.hypot(Math.abs(postInRow - centerX), Math.abs(postInBoard - centerY)) <= radius) {
-                    cordInRadius.push([postInRow, postInBoard])
-                }
-            }
-        }
-    })
-    return cordInRadius
-
-}
-
 /** This function is used to get the coordinate within a square based on given radius and board. (Not in used)
  *
  * @param {Array} board
@@ -117,7 +83,6 @@ function getSqrCordByCenter(board, centerX, centerY, radius) {
         }
     })
     return cordInRadius
-
 }
 
 /** This function is used to generate a matrix with given coordinates marked.
@@ -136,7 +101,6 @@ module.exports = {
     placePlantOnMatrix,
     printMatrix,
     blankMatrix,
-    getCircleCordByCenter,
     boundaryLimiter,
     getSqrCordByCenter,
     matrixMarker
