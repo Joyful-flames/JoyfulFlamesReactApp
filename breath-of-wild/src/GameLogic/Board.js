@@ -1,7 +1,7 @@
 const Plant = require("./Plant")
 const Species = require("./TempData/Species.json");
 
-/** This function used to generate a blank matrix with given size.
+/** This function used to generate a blank matrix with given size. (Not in use)
  *
  * @param {Number} width
  * @param {Number} height
@@ -13,7 +13,7 @@ function blankMatrix(width = 1, height = 1,) {
 
 /** This function used to print Matrix to Console with given matrix.
  *
- * @param matrix
+ * @param {Array} matrix
  * @returns {Promise<void>}
  */
 async function printMatrix(matrix) {
@@ -44,16 +44,6 @@ async function printMatrix(matrix) {
 function placePlantOnMatrix(matrix, position, plant) {
     matrix[position[0]][position[1]] = plant
     // console.log("A", plant.name, "place on", xCord, ",", yCord)
-}
-
-function boundaryLimiter(boundary, num) {
-    if (num > boundary) {
-        return boundary
-    } else if (num < 0) {
-        return 0
-    } else {
-        return num
-    }
 }
 
 /** This function is used to get the coordinate within a square based on given radius and board. (Not in used)
@@ -101,7 +91,6 @@ module.exports = {
     placePlantOnMatrix,
     printMatrix,
     blankMatrix,
-    boundaryLimiter,
     getSqrCordByCenter,
     matrixMarker
 }

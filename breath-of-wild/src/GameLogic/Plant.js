@@ -58,7 +58,7 @@ class Plant {
         }
     }
 
-    /** This function used to get the overall stats of given coordinates
+    /** This method used to get the overall stats of given coordinates.
      *
      * @param {Array} matrix
      * @param {Array} coordinates
@@ -91,15 +91,28 @@ class Plant {
         return {nullPos, lowTierPos, sameTierPos, highTierPos}
     }
 
+    /** This method used to determent whether the plant is over crowed in is crowed range
+     *  based on given crowed range stats and cell count in range.
+     *
+     * @param {Object} crowedRangeStats
+     * @param {Number} crowedRangePosLen
+     * @return {boolean} is plant crowed
+     */
     isCrowed(crowedRangeStats, crowedRangePosLen) {
         return (crowedRangeStats["sameTierPos"].length + crowedRangeStats["highTierPos"].length) / crowedRangePosLen > this.crowedRate
     }
 
+    /** This method used to determent whether the plant is mature for spreading seeds
+     *  based on current Plant's stage and grow percentage.
+     *
+     * @return {boolean} is plant ready to spread
+     */
     isMature() {
         return this.stage >= this.matureStage && this.percentage >= this.maturePercentage
     }
 
-    /**
+    /** This method used to spread current plant to nearby coordinates
+     *  based on given matrix(map), array of spreadable coordinates and current Plant's specie data.
      *
      * @param {Array[Array]} matrix
      * @param {Array} spreadCords
@@ -125,6 +138,10 @@ class Plant {
         return matrix
     }
 
+    /** This method used to return current Plants information for print in console.
+     *
+     * @return {string}
+     */
     consoleView() {
         var returnString = this.name[0] + String(this.stage)
         if (this.percentage > 9) {
@@ -135,7 +152,7 @@ class Plant {
         return returnString
     }
 
-    /** This function use to get the coordinates within a circle based on given radius and board.
+    /** This method use to get the coordinates within a circle based on given radius and board.
      *
      * @param {Array} matrix
      * @param {Number} centerX
@@ -145,6 +162,12 @@ class Plant {
      */
     getCircleCordByCenter(matrix, radius, centerX = this.xCord, centerY = this.yCord) {
 
+        /** This function used to limit the input number's max and min value based on given boundary.
+         *
+         * @param {Number} boundary
+         * @param {Number} num
+         * @return {number|*}
+         */
         function boundaryLimiter(boundary, num) {
             if (num > boundary) {
                 return boundary
@@ -160,6 +183,7 @@ class Plant {
 
         var cordInRadius = []
 
+        // map evey cell in matrix
         matrix.map(function (row) {
             var postInBoard = matrix.indexOf(row)
             if (yRange[1] >= postInBoard && yRange[0] <= postInBoard) {
@@ -176,6 +200,11 @@ class Plant {
 
     }
 
+    /** This method used to execute sequential components within a logic frame. Return with new matrix
+     *
+     * @param {Array} matrix
+     * @return {Array} matrix
+     */
     frameLogic(matrix) {
         // grow plant
         this.grow()
