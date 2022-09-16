@@ -20,11 +20,12 @@ class Plant {
         // basic stats
         this.xCord = coordinate[0]
         this.yCord = coordinate[1]
-        this.specieProperty = plantSpecie["property"]
+        this.plantSpecie = plantSpecie
         this.stage = stage
         this.percentage = percentage
 
         // specie property
+        this.specieProperty = this.plantSpecie["property"]
         this.tier = this.specieProperty["tier"]
         this.matureStage = this.specieProperty["matureStage"]
         this.maturePercentage = this.specieProperty["maturePercentage"]
@@ -48,9 +49,11 @@ class Plant {
         this.percentage += this.growthRate * growthSpeedModifier * cycle
 
         if (this.percentage > 99) {
-            if (this.stage <= this.tier) {
+            if (this.stage < this.tier) {
                 this.stage += 1
-                this.plantSpecie = 0
+                this.percentage = 0
+            } else {
+                this.percentage = 99
             }
         }
     }
@@ -96,25 +99,30 @@ class Plant {
         return this.stage >= this.matureStage && this.percentage >= this.maturePercentage
     }
 
-    spread(matrix, spreadCords, specie = this.plantSpecie) {
-
-        // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-        function getRandomArbitrary(min, max) {
-            return Math.random() * (max - min) + min;
-        }
+    /**
+     *
+     * @param {Array[Array]} matrix
+     * @param {Array} spreadCords
+     */
+    spread(matrix, spreadCords) {
+        console.log(spreadCords)
 
         const newPlantCords = []
+        const newPlantSpecie = this.plantSpecie
 
         spreadCords.map(function (cord) {
-            if (Math.random() > 0.3) {
+            if (Math.random() < 0.3) {
                 newPlantCords.push(cord)
             }
         })
 
+        if (newPlantCords.length > 0) {this.percentage = 0}
+
         newPlantCords.map(function (cord) {
-            matrix[cord[1]][cord[0]] = new Plant(cord, specie)
+            matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
         })
 
+        return matrix
     }
 
     consoleView() {
@@ -176,24 +184,28 @@ class Plant {
         const crowedRangePos = this.getCircleCordByCenter(matrix, this.xCord, this.crowedRange)
         const crowedRangeStats = this.rangeStats(matrix, crowedRangePos)
 
+        let spreadRangePos
+        let spreadRangeStats
+
         // check if crowed range is same as spread range, use simplified actions if there are same
         if (this.crowedRange === this.spreadRange) {
-            const spreadRangePos = crowedRangePos
-            const spreadRangeStats = crowedRangeStats
+            spreadRangePos = crowedRangePos
+            spreadRangeStats = crowedRangeStats
         } else {
-            const spreadRangePos = this.getCircleCordByCenter(matrix, this.xCord, this.spreadRange)
-            const spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
+            spreadRangePos = this.getCircleCordByCenter(matrix, this.xCord, this.spreadRange)
+            spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
         }
 
         // determine plant mature and crowed stats
         const mature = this.isMature()
         const crowed = this.isCrowed(crowedRangeStats, crowedRangePos.length)
 
-        console.log(spreadRangeStats)
-
         if (mature && (!crowed)) {
-            this.spread(matrix, spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"]))
+
+            const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
+            return this.spread(matrix, availablePos)
         }
+        return matrix
     }
 }
 

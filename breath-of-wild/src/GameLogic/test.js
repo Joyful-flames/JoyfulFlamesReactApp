@@ -13,7 +13,7 @@ function sleep(ms) {
 
 async function test(matrix, location_id) {
 
-    const run = 200
+    const run = 400
     var counter = 0
 
     var locationData = GameLogic.getLocationByID(location_id, Location)
@@ -21,27 +21,31 @@ async function test(matrix, location_id) {
 
     // const testPlantPos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
 
-    const testPlantPos = [[1, 1], [0, 1]]
+    const testPlantPos = [[1, 1]]
     // console.log(locationData)
     // console.log(locationSpecies)
 
-    testPlantPos.map(coordinate => Board.placePlantOnMatrix(matrix, coordinate, new Plant.Plant([1, 1], Species[0])))
+
+    testPlantPos.map(coordinate => matrix[coordinate[0]][coordinate[1]] = new Plant.Plant(coordinate, locationSpecies[0]))
     Board.printMatrix(matrix)
 
     while (counter < run) {
         console.log("Counter:", counter)
         matrix.map(row => row.map(function (colum) {
             if (colum instanceof Plant.Plant) {
-                colum.frameLogic(matrix)
+                matrix = colum.frameLogic(matrix)
             }
         }))
+        console.log("Counter:", counter)
+        Board.printMatrix(matrix).then()
         if (counter % 10 === 0) {
-            Board.printMatrix(matrix).then()
+            /*console.log("Counter:", counter)
+            Board.printMatrix(matrix).then()*/
         }
 
 
         counter++
-        await sleep(100);
+        await sleep(10);
     }
 }
 
@@ -51,4 +55,4 @@ printMatrix(a)
 console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadRange)))*/
 
 
-test(Board.blankMatrix(5, 5), "0")
+test(Board.blankMatrix(10, 10), "0")

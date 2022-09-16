@@ -4,7 +4,7 @@
     "commonName": "TestComName",
     "property": {
       "tier": 0,
-      "matureStage": 1,
+      "matureStage": 0,
       "maturePercentage": 99,
       "growthRate": 1,
       "crowedRange": 1,
@@ -37,7 +37,7 @@
     "commonName": "TestComName",
     "property": {
       "tier": 0,
-      "matureStage": 1,
+      "matureStage": 0,
       "maturePercentage": 99,
       "growthRate": 1,
       "crowedRange": 1,
