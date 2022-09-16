@@ -3,6 +3,7 @@ const Plant = require("./Plant")
 const GameLogic = require("./GameLogic")
 const Location = require("./TempData/Location.json")
 const Species = require("./TempData/Species.json")
+const {matrixMarker} = require("./Board");
 
 // GameLogic.gameLogic("0")
 
@@ -47,6 +48,9 @@ async function test(board, location_id) {
 }
 
 const a = Board.blankMatrix(10,10)
-console.log(Board.getCircleCordByCenter(a,9,9,2))
+const c = Board.getCircleCordByCenter(a,5,5,4)
+console.log(c.includes([5,3]))
+
+matrixMarker(a,c)
 
 //test(Board.blankMatrix(5, 5), "0")

@@ -13,7 +13,7 @@ function getSpeciesByID(specieIDs) {
         .filter(specie => specieIDs.includes(specie["specieId"]))
 }
 
-/** This function is used to get the location data from Location.json based on given Location ID
+/** This function is used to get the location data from Location.json based on given Location ID.
  *
  * @param {String} location_id
  * @param {JSON} Location
