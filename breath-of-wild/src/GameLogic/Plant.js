@@ -18,8 +18,9 @@ class Plant {
      */
     constructor(coordinate, plantSpecie, stage = 0, percentage = 0) {
         // basic stats
-        this.xCord = coordinate[0]
-        this.yCord = coordinate[1]
+        this.coordinate = coordinate
+        this.xCord = coordinate[1]
+        this.yCord = coordinate[0]
         this.plantSpecie = plantSpecie
         this.stage = stage
         this.percentage = percentage
@@ -74,8 +75,7 @@ class Plant {
 
 
         coordinates.map(function (coordinate) {
-            var cell = matrix[coordinate[1]][coordinate[0]]
-
+            var cell = matrix[coordinate[0]][coordinate[1]]
             if (cell instanceof Plant) {
                 if (cell.tier > tier) {
                     highTierPos.push(coordinate)
@@ -99,7 +99,7 @@ class Plant {
      * @return {boolean} is plant crowed
      */
     isCrowed(crowedRangeStats, crowedRangePosLen) {
-        return (crowedRangeStats["sameTierPos"].length + crowedRangeStats["highTierPos"].length) / crowedRangePosLen > this.crowedRate
+        return (crowedRangeStats["sameTierPos"].length / crowedRangePosLen) > this.crowedRate
     }
 
     /** This method used to determent whether the plant is mature for spreading seeds
@@ -118,7 +118,6 @@ class Plant {
      * @param {Array} spreadCords
      */
     spread(matrix, spreadCords) {
-        console.log(spreadCords)
 
         const newPlantCords = []
         const newPlantSpecie = this.plantSpecie
@@ -129,11 +128,14 @@ class Plant {
             }
         })
 
-        if (newPlantCords.length > 0) {this.percentage = 0}
+        console.log(this.percentage, this.coordinate, '->', newPlantCords, "in",spreadCords)
+        if (newPlantCords.length > 0) {
+            newPlantCords.map(function (cord) {
+                matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
+            })
+            this.percentage = 0
+        }
 
-        newPlantCords.map(function (cord) {
-            matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
-        })
 
         return matrix
     }
@@ -148,6 +150,12 @@ class Plant {
             returnString += String(this.percentage)
         } else {
             returnString += "0" + String(this.percentage)
+        }
+
+        if (this.crowed) {
+            returnString += "C"
+        } else {
+            returnString += "_"
         }
         return returnString
     }
@@ -178,8 +186,8 @@ class Plant {
             }
         }
 
-        const xRange = [centerX - radius, centerX + radius].map(cord => boundaryLimiter(matrix[0].length, cord))
-        const yRange = [centerY - radius, centerY + radius].map(cord => boundaryLimiter(matrix.length, cord))
+        const xRange = [centerX - radius, centerX + radius].map(cord => boundaryLimiter(matrix[0].length - 1, cord))
+        const yRange = [centerY - radius, centerY + radius].map(cord => boundaryLimiter(matrix.length - 1, cord))
 
         var cordInRadius = []
 
@@ -200,40 +208,53 @@ class Plant {
 
     }
 
+    getBioMass() {
+        return this.tier * 1000 + this.stage * 100 + this.percentage
+    }
+
     /** This method used to execute sequential components within a logic frame. Return with new matrix
      *
      * @param {Array} matrix
+     * @param {boolean} logMode
      * @return {Array} matrix
      */
-    frameLogic(matrix) {
+    frameLogic(matrix, logMode = false) {
+
         // grow plant
         this.grow()
 
         // get coordinates in crowed range and extract stats
-        const crowedRangePos = this.getCircleCordByCenter(matrix, this.xCord, this.crowedRange)
+        const crowedRangePos = this.getCircleCordByCenter(matrix, this.crowedRange)
         const crowedRangeStats = this.rangeStats(matrix, crowedRangePos)
 
         let spreadRangePos
         let spreadRangeStats
 
-        // check if crowed range is same as spread range, use simplified actions if there are same
-        if (this.crowedRange === this.spreadRange) {
-            spreadRangePos = crowedRangePos
-            spreadRangeStats = crowedRangeStats
-        } else {
-            spreadRangePos = this.getCircleCordByCenter(matrix, this.xCord, this.spreadRange)
-            spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
-        }
-
         // determine plant mature and crowed stats
-        const mature = this.isMature()
-        const crowed = this.isCrowed(crowedRangeStats, crowedRangePos.length)
+        this.mature = this.isMature()
+        this.crowed = this.isCrowed(crowedRangeStats, crowedRangePos.length)
 
-        if (mature && (!crowed)) {
+        if (this.crowed) {
+            matrix[this.yCord][this.xCord] = null
+            return matrix
+        } else if (this.mature) {
+            // check if crowed range is same as spread range, use simplified actions if there are same
+            if (this.crowedRange === this.spreadRange) {
+                spreadRangePos = crowedRangePos
+                spreadRangeStats = crowedRangeStats
+            } else {
+                spreadRangePos = this.getCircleCordByCenter(matrix, this.spreadRange)
+                spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
+            }
 
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
             return this.spread(matrix, availablePos)
         }
+
+        if (logMode) {
+            console.log(this.name, "in", this.coordinate, "STN:", crowedRangeStats["sameTierPos"], "/", crowedRangePos.length, "COMP:", this.crowedRange)
+        }
+
         return matrix
     }
 }
