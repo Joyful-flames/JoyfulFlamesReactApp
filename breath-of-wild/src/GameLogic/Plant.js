@@ -219,6 +219,7 @@ class Plant {
      * @return {Array} matrix
      */
     frameLogic(matrix, logMode = false) {
+
         // grow plant
         this.grow()
 
