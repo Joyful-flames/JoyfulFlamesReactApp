@@ -43,7 +43,7 @@ async function test(matrix, location_id) {
             }
         }))
         if (counter % 1 === 0 && counter > 0) {
-            // logMode = true
+            logMode = true
             consoleMatrix = Board.outputMatrix(matrix) + "Counter:" + counter + ' | TotalBioMass: ' + totalBioMass + "\n"
             console.log(consoleMatrix)
             totalBioMass = GameLogic.getTotalBioMass(matrix)

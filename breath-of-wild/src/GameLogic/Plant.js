@@ -116,8 +116,9 @@ class Plant {
      *
      * @param {Array[Array]} matrix
      * @param {Array} spreadCords
+     * @param {Number} spreadChance
      */
-    spread(matrix, spreadCords) {
+    multiSpread(matrix, spreadCords, spreadChance = 0.3) {
 
         const newPlantCords = []
         const newPlantSpecie = this.plantSpecie
@@ -130,13 +131,29 @@ class Plant {
 
         console.log(this.percentage, this.coordinate, '->', newPlantCords, "in",spreadCords)
         if (newPlantCords.length > 0) {
+            this.percentage = 0
             newPlantCords.map(function (cord) {
                 matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
             })
-            this.percentage = 0
+
         }
+        return matrix
+    }
 
-
+    /** This method used to spread current plant to a nearby coordinate
+     *  based on given matrix(map), array of spreadable coordinates and current Plant's specie data.
+     *
+     * @param {Array[Array]} matrix
+     * @param {Array} spreadCords
+     * @param {Number} spreadChance
+     */
+    singleSpread(matrix, spreadCords, spreadChance = 0.3) {
+        const newPlantSpecie = this.plantSpecie
+        const newPlantCords = spreadCords[Math.floor(Math.random() * spreadCords.length)]
+        if (Math.random() < spreadChance) {
+            this.percentage = 0
+            matrix[newPlantCords[1]][newPlantCords[0]] = new Plant(newPlantCords, newPlantSpecie)
+        }
         return matrix
     }
 
@@ -219,7 +236,6 @@ class Plant {
      * @return {Array} matrix
      */
     frameLogic(matrix, logMode = false) {
-
         // grow plant
         this.grow()
 
@@ -246,13 +262,12 @@ class Plant {
                 spreadRangePos = this.getCircleCordByCenter(matrix, this.spreadRange)
                 spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
             }
-
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
-            return this.spread(matrix, availablePos)
+            return this.multiSpread(matrix, availablePos)
         }
 
         if (logMode) {
-            console.log(this.name, "in", this.coordinate, "STN:", crowedRangeStats["sameTierPos"], "/", crowedRangePos.length, "COMP:", this.crowedRange)
+            // console.log(this.name, "in", this.coordinate, "availablePos:", availablePos)
         }
 
         return matrix

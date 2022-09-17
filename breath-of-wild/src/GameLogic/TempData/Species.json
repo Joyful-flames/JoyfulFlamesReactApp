@@ -9,7 +9,7 @@
       "growthRate": 10,
       "crowedRange": 1,
       "crowedRate": 1,
-      "spreadRange": 1,
+      "spreadRange": 2,
       "waterConsume": 0,
       "nutritionConsume": -1
     },
