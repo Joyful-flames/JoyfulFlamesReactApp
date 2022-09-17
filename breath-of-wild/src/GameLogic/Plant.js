@@ -7,7 +7,6 @@ const growthSpeedModifier = 1
  *
  */
 class Plant {
-    function
 
     /** the class constructor
      *
