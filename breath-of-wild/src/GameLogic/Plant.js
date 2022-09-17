@@ -120,23 +120,22 @@ class Plant {
      */
     multiSpread(matrix, spreadCords, spreadChance = 0.3) {
 
-        const newPlantCords = []
         const newPlantSpecie = this.plantSpecie
+        var growPercentage = this.percentage
+        var chance
+
+        console.log(this.name, "at", this.coordinate, "spread to:")
 
         spreadCords.map(function (cord) {
-            if (Math.random() < 0.3) {
-                newPlantCords.push(cord)
+            chance = Math.random()
+            console.log("Chance:", chance, "->", cord, chance < 0.3)
+            if (chance < 0.3) {
+                growPercentage = 0
+                matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
             }
         })
 
-        console.log(this.percentage, this.coordinate, '->', newPlantCords, "in",spreadCords)
-        if (newPlantCords.length > 0) {
-            this.percentage = 0
-            newPlantCords.map(function (cord) {
-                matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
-            })
-
-        }
+        this.percentage = growPercentage
         return matrix
     }
 
@@ -263,6 +262,7 @@ class Plant {
                 spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
             }
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
+            console.log(spreadRangeStats)
             return this.multiSpread(matrix, availablePos)
         }
 
