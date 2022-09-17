@@ -1,9 +1,11 @@
+const fs = require('fs');
+
 const Board = require("./Board")
 const Plant = require("./Plant")
 const GameLogic = require("./GameLogic")
 const Location = require("./TempData/Location.json")
 const Species = require("./TempData/Species.json")
-const {matrixMarker, printMatrix} = require("./Board");
+const {updateAvailableSpecies} = require("./GameLogic");
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -13,39 +15,46 @@ function sleep(ms) {
 
 async function test(matrix, location_id) {
 
-    const run = 400
+    const run = 400000
     var counter = 0
+    let logMode = false
 
-    var locationData = GameLogic.getLocationByID(location_id, Location)
-    var locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
+    const locationData = GameLogic.getLocationByID(location_id, Location);
+    const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
+    var availableSpecies
 
     // const testPlantPos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
+    const testPlantPos = [[4, 4]]
 
-    const testPlantPos = [[1, 1]]
     // console.log(locationData)
     // console.log(locationSpecies)
 
 
     testPlantPos.map(coordinate => matrix[coordinate[0]][coordinate[1]] = new Plant.Plant(coordinate, locationSpecies[0]))
-    Board.printMatrix(matrix)
+
+    let totalBioMass;
 
     while (counter < run) {
-        console.log("Counter:", counter)
+        totalBioMass = 0
         matrix.map(row => row.map(function (colum) {
             if (colum instanceof Plant.Plant) {
-                matrix = colum.frameLogic(matrix)
+                matrix = colum.frameLogic(matrix, logMode)
+                totalBioMass += colum.getBioMass()
             }
         }))
-        console.log("Counter:", counter)
-        Board.printMatrix(matrix).then()
-        if (counter % 10 === 0) {
-            /*console.log("Counter:", counter)
-            Board.printMatrix(matrix).then()*/
+        if (counter % 1 === 0 && counter > 0) {
+            // logMode = true
+            consoleMatrix = Board.outputMatrix(matrix) + "Counter:" + counter + ' | TotalBioMass: ' + totalBioMass + "\n"
+            console.log(consoleMatrix)
+            totalBioMass = GameLogic.getTotalBioMass(matrix)
+            availableSpecies = await updateAvailableSpecies(locationSpecies, matrix, totalBioMass)
+            // console.log(availableSpecies.length)
+            // availableSpecies.map(specie => console.log(specie["commonName"]))
         }
 
 
         counter++
-        await sleep(10);
+        await sleep(100);
     }
 }
 
@@ -56,3 +65,9 @@ console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadR
 
 
 test(Board.blankMatrix(10, 10), "0")
+
+/*const locationData = GameLogic.getLocationByID("0", Location);
+const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
+
+console.log(locationSpecies[0]["property"]["tier"])
+console.log(locationSpecies.filter(specie => specie["property"]["tier"] === 0))*/

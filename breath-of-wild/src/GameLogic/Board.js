@@ -18,6 +18,13 @@ function blankMatrix(width = 1, height = 1,) {
  */
 async function printMatrix(matrix) {
     var printString = ""
+
+    for (let i = 0; i < matrix[0].length; i++){
+        printString += "[__" + String(i) + "__]"
+    }
+
+    printString += "\n"
+
     matrix.map(function (row) {
         row.map(function (column) {
             printString += "["
@@ -26,13 +33,41 @@ async function printMatrix(matrix) {
             } else if (column === "MK") {
                 printString += "_MK_"
             } else {
-                printString += "____"
+                printString += "_____"
             }
             printString += "]"
         })
-        printString += "\n"
+        printString += " "+ matrix.indexOf(row) + "\n"
     })
     console.log(printString)
+}
+
+
+
+function outputMatrix(matrix) {
+    var printString = ""
+
+    for (let i = 0; i < matrix[0].length; i++){
+        printString += "[__" + String(i) + "__]"
+    }
+
+    printString += "\n"
+
+    matrix.map(function (row) {
+        row.map(function (column) {
+            printString += "["
+            if (column instanceof Plant.Plant) {
+                printString += column.consoleView()
+            } else if (column === "MK") {
+                printString += "_MK_"
+            } else {
+                printString += "_____"
+            }
+            printString += "]"
+        })
+        printString += " "+ matrix.indexOf(row) + "\n"
+    })
+    return printString
 }
 
 /** This function used to place a plant on matrix with given matrix, coordinate and plant specie.
@@ -61,7 +96,6 @@ function getSqrCordByCenter(board, centerX, centerY, radius) {
 
     const xRange = [centerX - radius, centerX + radius].map(cord => boundaryLimiter(xBound, cord))
     const yRange = [centerY - radius, centerY + radius].map(cord => boundaryLimiter(yBound, cord))
-    console.log(xBound, yBound)
     var cordInRadius = []
 
     board.map(function (row) {
@@ -87,7 +121,9 @@ async function matrixMarker(matrix, coordinates) {
     printMatrix(board).then()
 }
 
+
 module.exports = {
+    outputMatrix,
     placePlantOnMatrix,
     printMatrix,
     blankMatrix,
