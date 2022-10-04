@@ -1,7 +1,7 @@
-import Profile from "../components/Profile";
+import ChoseButton from "../components/buttons/ChoseButton";
 
 export default function App() {
     return (
-        <Profile username={"Lucy"} email={"1"} signature={"2"} phone={"3"}></Profile>
+        <ChoseButton text={"back"}></ChoseButton>
     );
 }
