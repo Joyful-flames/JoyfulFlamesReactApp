@@ -1,0 +1,23 @@
+:root {
+	--purpleColorLighter: #A42DE8;
+	--blueColorLighter: #318AFF;
+	--blueColorDarker: #2D3DE8;
+	--bgColor: #ffffff;
+	--fgColor: #800080;
+	--fgColorLighter: rgba(128,0,128,0.5);
+	--headerTextColor: #ffffff;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* Profile */
+.profile {
+	margin-left: 4%;
+}
