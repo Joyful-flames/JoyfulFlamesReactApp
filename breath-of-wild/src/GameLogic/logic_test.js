@@ -5,6 +5,7 @@ const Plant = require("./Plant")
 const GameLogic = require("./GameLogic")
 const Location = require("./TempData/Location.json")
 const Species = require("./TempData/Species.json")
+const Terrain = require("./TempData/Terrain.json")
 const {updateAvailableSpecies} = require("./GameLogic");
 
 function sleep(ms) {
@@ -28,8 +29,6 @@ async function logic_test(matrix, location_id) {
 
     // console.log(locationData)
     // console.log(locationSpecies)
-
-
     testPlantPos.map(coordinate => matrix[coordinate[0]][coordinate[1]] = new Plant.Plant(coordinate, locationSpecies[0]))
 
     let totalBioMass;

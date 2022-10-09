@@ -35,7 +35,8 @@ class Plant {
         this.crowedRate = this.specieProperty["crowedRate"]
         this.spreadRange = this.specieProperty["spreadRange"]
         this.waterConsume = this.specieProperty["waterConsume"]
-        this.nutritionCosume = this.specieProperty["nutritionConsume"]
+        // this.nutritionCosume = this.specieProperty["nutritionConsume"]
+        this.sutableLand = this.plantSpecie["conditions"]["terrainID"]
 
         // specie info
         this.name = plantSpecie.info.name
@@ -56,8 +57,15 @@ class Plant {
             } else {
                 this.percentage = 99
             }
+        } else if (this.percentage < 0 ){
+            if (this.stage > 0) {
+                this.stage -= 1
+            } else {
+                matrix[this.yCord][this.xCord]
+            }
         }
     }
+
 
     /** This method used to get the overall stats of given coordinates.
      *
@@ -121,21 +129,28 @@ class Plant {
     multiSpread(matrix, spreadCords, spreadChance = 0.3) {
 
         const newPlantSpecie = this.plantSpecie
-        var growPercentage = this.percentage
-        var chance
+        var newSpreadCords = []
 
-        console.log(this.name, "at", this.coordinate, "spread to:")
+        const self_pos = this.coordinate
+        var chance
 
         spreadCords.map(function (cord) {
             chance = Math.random()
-            console.log("Chance:", chance, "->", cord, chance < 0.3)
-            if (chance < 0.3) {
-                growPercentage = 0
-                matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
+            if (chance < 0.3 && cord !== self_pos) {
+                newSpreadCords.push(cord)
             }
         })
 
-        this.percentage = growPercentage
+        if (newSpreadCords.length !== 0){
+            this.percentage = 0
+            console.log(this.name, "at", this.coordinate, "spread to:", newSpreadCords)
+            console.log("Within Cords:", spreadCords)
+        }
+
+        newSpreadCords.map(function (cord) {
+            matrix[cord[1]][cord[0]] = new Plant(cord, newPlantSpecie)
+        })
+
         return matrix
     }
 
@@ -146,6 +161,7 @@ class Plant {
      * @param {Array} spreadCords
      * @param {Number} spreadChance
      */
+
     singleSpread(matrix, spreadCords, spreadChance = 0.3) {
         const newPlantSpecie = this.plantSpecie
         const newPlantCords = spreadCords[Math.floor(Math.random() * spreadCords.length)]
@@ -232,15 +248,17 @@ class Plant {
      *
      * @param {Array} matrix
      * @param {boolean} logMode
+     * @param landType
+     * @param weather
      * @return {Array} matrix
      */
-    frameLogic(matrix, logMode = false) {
+    frameLogic(matrix, logMode = false, landType, weather) {
         // grow plant
         this.grow()
 
         // get coordinates in crowed range and extract stats
-        const crowedRangePos = this.getCircleCordByCenter(matrix, this.crowedRange)
-        const crowedRangeStats = this.rangeStats(matrix, crowedRangePos)
+        const crowedRangePos = this.getCircleCordByCenter(matrix, this.crowedRange) // List
+        const crowedRangeStats = this.rangeStats(matrix, crowedRangePos) //
 
         let spreadRangePos
         let spreadRangeStats
@@ -252,6 +270,7 @@ class Plant {
         if (this.crowed) {
             matrix[this.yCord][this.xCord] = null
             return matrix
+
         } else if (this.mature) {
             // check if crowed range is same as spread range, use simplified actions if there are same
             if (this.crowedRange === this.spreadRange) {
@@ -263,6 +282,10 @@ class Plant {
             }
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
             console.log(spreadRangeStats)
+
+            // console.log(this.coordinate)
+            // console.log(spreadRangeStats)
+
             return this.multiSpread(matrix, availablePos)
         }
 
