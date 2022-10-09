@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="test.js" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
+    <node-interpreter value="project" />
+    <node-options value="" />
+    <jest-package value="" />
+    <working-dir value="$PROJECT_DIR$/breath-of-wild" />
+    <envs />
+    <scope-kind value="TEST_FILE" />
+    <test-file value="$PROJECT_DIR$/breath-of-wild/src/GameLogic/test.js" />
+    <method v="2" />
+  </configuration>
+</component>

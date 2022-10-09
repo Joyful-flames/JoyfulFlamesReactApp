@@ -13,7 +13,7 @@ function sleep(ms) {
     });
 }
 
-async function test(matrix, location_id) {
+async function logic_test(matrix, location_id) {
 
     const run = 400000
     var counter = 0
@@ -64,7 +64,7 @@ printMatrix(a)
 console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadRange)))*/
 
 
-test(Board.blankMatrix(10, 10), "0")
+logic_test(Board.blankMatrix(10, 10), "0")
 
 /*const locationData = GameLogic.getLocationByID("0", Location);
 const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
