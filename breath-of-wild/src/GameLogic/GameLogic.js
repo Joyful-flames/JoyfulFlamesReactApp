@@ -13,11 +13,6 @@ function getSpeciesByID(specieIDs) {
         .filter(specie => specieIDs.includes(specie["specieId"]))
 }
 
-function getSpeciesScoreByID(specieIDs){
-    return Object.keys(Species).map((key) => Species[key]).
-    filter(specie => specieIDs.includes(specie["speciesScore"]))
-}
-
 /** This function is used to generate random weather with given weight.
  *
  * @param climate{Object} e.g. {sunny: 0.1, cloud: 0.8, rain: 0.1}

@@ -22,7 +22,6 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
     let logMode = false
 
     const dateTemp = GameLogic.tempCSV2dateTempList(Temperature)
-
     const locationData = GameLogic.getLocationByID(location_id, Location);
     const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
     const speciesScore = locationData["speciesScore"]
@@ -51,21 +50,19 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
             if (colum instanceof Plant.Plant) {
                 plantMatrix = colum.frameLogic(plantMatrix, landMatrix[colum.yCord][colum.xCord], currentTemp, logMode)
                 totalBioMass += colum.getBioMass()
-            }
-        }))
+            }}))
+
         if (cycle % 1 === 0 && cycle > 0) {
             logMode = true
-            consoleMatrix = Board.outputMatrix(plantMatrix) + "Counter:" + cycle + ' | TotalBioMass: ' + totalBioMass + "\n"
+            consoleMatrix =
+                Board.outputMatrix(plantMatrix) +
+                `Counter: ${cycle} | TotalBioMass: ${totalBioMass} ` +
+                `Temp: ${currentTemp.minTemp} - ${currentTemp.maxTemp} Weather: ${currentWeather} ` +
+                `Available: ${availableSpecies}`
             console.log(consoleMatrix)
-            console.log(currentTemp)
-            console.log(currentWeather)
             totalBioMass = GameLogic.getTotalBioMass(plantMatrix)
             availableSpecies = updateAvailableSpecies(locationData, totalBioMass)
-            console.log(availableSpecies)
-            // console.log(availableSpecies.length)
-            // availableSpecies.map(specie => console.log(specie["commonName"]))
         }
-
 
         cycle++
         await sleep(100);
@@ -81,7 +78,7 @@ console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadR
 logic_test(Board.blankMatrix(10, 10), Board.blankMatrix(10, 10), "0")
 
 /*const locationData = GameLogic.getLocationByID("0", Location);
-const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
+const locationSpecies = GameLogic.getSpeciesByID(locationData["   "])
 
 console.log(locationSpecies[0]["property"]["tier"])
 console.log(locationSpecies.filter(specie => specie["property"]["tier"] === 0))*/

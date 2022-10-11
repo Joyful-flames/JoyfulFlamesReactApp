@@ -160,8 +160,8 @@ class Plant {
 
         if (newSpreadCords.length !== 0) {
             this.percentage = 0
-            console.log(this.name, "at", this.coordinate, "spread to:", newSpreadCords)
-            console.log("Within Cords:", spreadCords)
+            // console.log(this.name, "at", this.coordinate, "spread to:", newSpreadCords)
+            // console.log("Within Cords:", spreadCords)
         }
 
         newSpreadCords.map(function (cord) {
@@ -298,7 +298,7 @@ class Plant {
                 spreadRangeStats = this.rangeStats(_plantMatrix, spreadRangePos)
             }
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
-            console.log(spreadRangeStats)
+            //console.log(spreadRangeStats)
 
             // console.log(this.coordinate)
             // console.log(spreadRangeStats)
