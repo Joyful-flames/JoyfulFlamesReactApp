@@ -35,8 +35,8 @@ class Plant {
         this.crowedRate = this.specieProperty["crowedRate"]
         this.spreadRange = this.specieProperty["spreadRange"]
         this.waterConsume = this.specieProperty["waterConsume"]
-        // this.nutritionCosume = this.specieProperty["nutritionConsume"]
         this.sutableLand = this.plantSpecie["conditions"]["terrainID"]
+        this.sutableTemp = this.plantSpecie["conditions"]["temp"]
 
         // specie info
         this.name = plantSpecie.info.name
@@ -45,10 +45,22 @@ class Plant {
 
     /** This method used to add growth stats of a plant based on given cycle number.
      *
+     * @param {Object} minMaxTemp
      * @param {Number} cycle
      */
-    grow(cycle = 1) {
-        this.percentage += this.growthRate * growthSpeedModifier * cycle
+    grow(minMaxTemp, cycle = 1) {
+
+        var landFactor = 1
+        var tempFactor = 1
+        if (minMaxTemp.minTemp > this.sutableTemp["suitableLowTemp"] && minMaxTemp.maxTemp < this.sutableTemp["suitableHighTemp"]) {
+            tempFactor += 0.25
+        } else if (minMaxTemp.minTemp < this.sutableTemp["minTemp"] && minMaxTemp.maxTemp > this.sutableTemp["maxTemp"]) {
+            this.percentage -= this.growthRate
+        } else {
+            this.percentage -= this.growthRate * 0.5
+        }
+
+        this.percentage += this.growthRate * growthSpeedModifier * landFactor * tempFactor * cycle
 
         if (this.percentage > 99) {
             if (this.stage < this.tier) {
@@ -57,11 +69,11 @@ class Plant {
             } else {
                 this.percentage = 99
             }
-        } else if (this.percentage < 0 ){
+        } else if (this.percentage < 0) {
             if (this.stage > 0) {
                 this.stage -= 1
             } else {
-                matrix[this.yCord][this.xCord]
+                matrix[this.yCord][this.xCord] = null // remove it self
             }
         }
     }
@@ -141,7 +153,7 @@ class Plant {
             }
         })
 
-        if (newSpreadCords.length !== 0){
+        if (newSpreadCords.length !== 0) {
             this.percentage = 0
             console.log(this.name, "at", this.coordinate, "spread to:", newSpreadCords)
             console.log("Within Cords:", spreadCords)
@@ -248,13 +260,12 @@ class Plant {
      *
      * @param {Array} matrix
      * @param {boolean} logMode
-     * @param landType
-     * @param weather
+     * @param minMaxTemp
      * @return {Array} matrix
      */
-    frameLogic(matrix, logMode = false, landType, weather) {
+    frameLogic(matrix, minMaxTemp, logMode = false) {
         // grow plant
-        this.grow()
+        this.grow(minMaxTemp)
 
         // get coordinates in crowed range and extract stats
         const crowedRangePos = this.getCircleCordByCenter(matrix, this.crowedRange) // List

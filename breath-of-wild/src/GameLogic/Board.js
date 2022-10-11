@@ -19,7 +19,7 @@ function blankMatrix(width = 1, height = 1,) {
 async function printMatrix(matrix) {
     var printString = ""
 
-    for (let i = 0; i < matrix[0].length; i++){
+    for (let i = 0; i < matrix[0].length; i++) {
         printString += "[__" + String(i) + "__]"
     }
 
@@ -37,17 +37,16 @@ async function printMatrix(matrix) {
             }
             printString += "]"
         })
-        printString += " "+ matrix.indexOf(row) + "\n"
+        printString += " " + matrix.indexOf(row) + "\n"
     })
     console.log(printString)
 }
 
 
-
 function outputMatrix(matrix) {
     var printString = ""
 
-    for (let i = 0; i < matrix[0].length; i++){
+    for (let i = 0; i < matrix[0].length; i++) {
         printString += "[__" + String(i) + "__]"
     }
 
@@ -65,7 +64,7 @@ function outputMatrix(matrix) {
             }
             printString += "]"
         })
-        printString += " "+ matrix.indexOf(row) + "\n"
+        printString += " " + matrix.indexOf(row) + "\n"
     })
     return printString
 }

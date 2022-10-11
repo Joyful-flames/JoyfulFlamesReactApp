@@ -65,4 +65,17 @@ async function updateAvailableSpecies(locationSpecies, matrix, totalBioMass, com
     }
 }
 
-module.exports = {gameLogic, getSpeciesByID, getLocationByID, getTotalBioMass, updateAvailableSpecies}
+function tempCSV2dateTempList(tempCSV) {
+    dateTemp = []
+    tempCSV.split("\r\n").map(date => dateTemp.push(date.split(",")))
+    return dateTemp
+}
+
+module.exports = {
+    tempCSV2dateTempList,
+    gameLogic,
+    getSpeciesByID,
+    getLocationByID,
+    getTotalBioMass,
+    updateAvailableSpecies
+}

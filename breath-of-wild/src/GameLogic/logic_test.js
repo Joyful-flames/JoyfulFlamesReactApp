@@ -6,6 +6,7 @@ const GameLogic = require("./GameLogic")
 const Location = require("./TempData/Location.json")
 const Species = require("./TempData/Species.json")
 const Terrain = require("./TempData/Terrain.json")
+var Temperature = require("fs").readFileSync("./TempData/BNE2021_temp.csv", "utf8")
 const {updateAvailableSpecies} = require("./GameLogic");
 
 function sleep(ms) {
@@ -17,8 +18,10 @@ function sleep(ms) {
 async function logic_test(matrix, location_id) {
 
     const run = 400000
-    var counter = 0
+    var cycle = 0
     let logMode = false
+
+    dateTemp = GameLogic.tempCSV2dateTempList(Temperature)
 
     const locationData = GameLogic.getLocationByID(location_id, Location);
     const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
@@ -33,18 +36,20 @@ async function logic_test(matrix, location_id) {
 
     let totalBioMass;
 
-    while (counter < run) {
+    while (cycle < run) {
         totalBioMass = 0
+        var currentTemp = {minTemp: dateTemp[cycle % 365 + 1][1], maxTemp: dateTemp[cycle % 365 + 1][2]}
         matrix.map(row => row.map(function (colum) {
             if (colum instanceof Plant.Plant) {
-                matrix = colum.frameLogic(matrix, logMode)
+                matrix = colum.frameLogic(matrix, currentTemp, logMode)
                 totalBioMass += colum.getBioMass()
             }
         }))
-        if (counter % 1 === 0 && counter > 0) {
+        if (cycle % 1 === 0 && cycle > 0) {
             logMode = true
-            consoleMatrix = Board.outputMatrix(matrix) + "Counter:" + counter + ' | TotalBioMass: ' + totalBioMass + "\n"
+            consoleMatrix = Board.outputMatrix(matrix) + "Counter:" + cycle + ' | TotalBioMass: ' + totalBioMass + "\n"
             console.log(consoleMatrix)
+            console.log(currentTemp)
             totalBioMass = GameLogic.getTotalBioMass(matrix)
             availableSpecies = await updateAvailableSpecies(locationSpecies, matrix, totalBioMass)
             // console.log(availableSpecies.length)
@@ -52,7 +57,7 @@ async function logic_test(matrix, location_id) {
         }
 
 
-        counter++
+        cycle++
         await sleep(100);
     }
 }
