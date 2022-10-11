@@ -87,9 +87,8 @@ function getTotalBioMass(matrix) {
 
 function updateAvailableSpecies(locationData, totalBioMass){
     var availableSpecies = []
-    console.log(locationData, totalBioMass)
     Object.keys(locationData["speciesScore"]).map(species => availableSpecies.push([species, locationData["speciesScore"][species]]))
-    return availableSpecies.filter(species => species[1] < totalBioMass)
+    return availableSpecies.filter(species => species[1] < totalBioMass).map(species => species[0])
 }
 
 function tempCSV2dateTempList(tempCSV) {
