@@ -13,6 +13,11 @@ function getSpeciesByID(specieIDs) {
         .filter(specie => specieIDs.includes(specie["specieId"]))
 }
 
+function getSpeciesScoreByID(specieIDs){
+    return Object.keys(Species).map((key) => Species[key]).
+    filter(specie => specieIDs.includes(specie["speciesScore"]))
+}
+
 /** This function is used to generate random weather with given weight.
  *
  * @param climate{Object} e.g. {sunny: 0.1, cloud: 0.8, rain: 0.1}
@@ -55,7 +60,7 @@ function gameLogic(matrix, location_id) {
  * @param matrix
  * @returns {Promise<number>}
  */
-async function getTotalBioMass(matrix) {
+function getTotalBioMass(matrix) {
     let totalBioMass = 0
     matrix.map(row => row.map(function (colum) {
         if (colum instanceof Plant.Plant) {
@@ -65,7 +70,7 @@ async function getTotalBioMass(matrix) {
     return totalBioMass
 }
 
-async function updateAvailableSpecies(locationSpecies, matrix, totalBioMass, completionIndex = 0.7) {
+/*async function updateAvailableSpecies(locationSpecies, matrix, totalBioMass, completionIndex = 0.7) {
 
     const totalCell = matrix.lenght * matrix[0].length
 
@@ -78,6 +83,13 @@ async function updateAvailableSpecies(locationSpecies, matrix, totalBioMass, com
     } else {
         return locationSpecies.filter(specie => specie["property"]["tier"] === 0)
     }
+}*/
+
+function updateAvailableSpecies(locationData, totalBioMass){
+    var availableSpecies = []
+    console.log(locationData, totalBioMass)
+    Object.keys(locationData["speciesScore"]).map(species => availableSpecies.push([species, locationData["speciesScore"][species]]))
+    return availableSpecies.filter(species => species[1] < totalBioMass)
 }
 
 function tempCSV2dateTempList(tempCSV) {

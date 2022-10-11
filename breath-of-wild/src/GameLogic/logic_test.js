@@ -25,8 +25,10 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
 
     const locationData = GameLogic.getLocationByID(location_id, Location);
     const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
+    const speciesScore = locationData["speciesScore"]
     const climate = locationData["weatherList"]
 
+    console.log(speciesScore)
     var availableSpecies
 
     // const testPlantPos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
@@ -58,7 +60,8 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
             console.log(currentTemp)
             console.log(currentWeather)
             totalBioMass = GameLogic.getTotalBioMass(plantMatrix)
-            availableSpecies = await updateAvailableSpecies(locationSpecies, plantMatrix, totalBioMass)
+            availableSpecies = updateAvailableSpecies(locationData, totalBioMass)
+            console.log(availableSpecies)
             // console.log(availableSpecies.length)
             // availableSpecies.map(specie => console.log(specie["commonName"]))
         }
