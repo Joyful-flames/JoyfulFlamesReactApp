@@ -46,9 +46,10 @@ class Plant {
     /** This method used to add growth stats of a plant based on given cycle number.
      *
      * @param {Object} minMaxTemp
+     * @param landType
      * @param {Number} cycle
      */
-    grow(minMaxTemp, cycle = 1) {
+    grow(minMaxTemp, landType, cycle = 1) {
 
         var landFactor = 1
         var tempFactor = 1
@@ -58,6 +59,10 @@ class Plant {
             this.percentage -= this.growthRate
         } else {
             this.percentage -= this.growthRate * 0.5
+        }
+
+        if (!this.sutableLand.includes(landType)) {
+            this.percentage -= this.growthRate
         }
 
         this.percentage += this.growthRate * growthSpeedModifier * landFactor * tempFactor * cycle
@@ -258,18 +263,19 @@ class Plant {
 
     /** This method used to execute sequential components within a logic frame. Return with new matrix
      *
-     * @param {Array} matrix
+     * @param {Array} _plantMatrix
+     * @param landType
      * @param {boolean} logMode
      * @param minMaxTemp
      * @return {Array} matrix
      */
-    frameLogic(matrix, minMaxTemp, logMode = false) {
+    frameLogic(_plantMatrix, landType, minMaxTemp, logMode = false) {
         // grow plant
-        this.grow(minMaxTemp)
+        this.grow(minMaxTemp, landType)
 
         // get coordinates in crowed range and extract stats
-        const crowedRangePos = this.getCircleCordByCenter(matrix, this.crowedRange) // List
-        const crowedRangeStats = this.rangeStats(matrix, crowedRangePos) //
+        const crowedRangePos = this.getCircleCordByCenter(_plantMatrix, this.crowedRange) // List
+        const crowedRangeStats = this.rangeStats(_plantMatrix, crowedRangePos) //
 
         let spreadRangePos
         let spreadRangeStats
@@ -279,8 +285,8 @@ class Plant {
         this.crowed = this.isCrowed(crowedRangeStats, crowedRangePos.length)
 
         if (this.crowed) {
-            matrix[this.yCord][this.xCord] = null
-            return matrix
+            _plantMatrix[this.yCord][this.xCord] = null
+            return _plantMatrix
 
         } else if (this.mature) {
             // check if crowed range is same as spread range, use simplified actions if there are same
@@ -288,8 +294,8 @@ class Plant {
                 spreadRangePos = crowedRangePos
                 spreadRangeStats = crowedRangeStats
             } else {
-                spreadRangePos = this.getCircleCordByCenter(matrix, this.spreadRange)
-                spreadRangeStats = this.rangeStats(matrix, spreadRangePos)
+                spreadRangePos = this.getCircleCordByCenter(_plantMatrix, this.spreadRange)
+                spreadRangeStats = this.rangeStats(_plantMatrix, spreadRangePos)
             }
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
             console.log(spreadRangeStats)
@@ -297,14 +303,14 @@ class Plant {
             // console.log(this.coordinate)
             // console.log(spreadRangeStats)
 
-            return this.multiSpread(matrix, availablePos)
+            return this.multiSpread(_plantMatrix, availablePos)
         }
 
         if (logMode) {
             // console.log(this.name, "in", this.coordinate, "availablePos:", availablePos)
         }
 
-        return matrix
+        return _plantMatrix
     }
 }
 

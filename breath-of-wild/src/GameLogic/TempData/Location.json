@@ -4,6 +4,11 @@
     "continent": "Oceania",
     "region": "Queensland",
     "climateID": 0,
+    "weatherList": {
+      "sunny": 0.1,
+      "cloud": 0.8,
+      "rain": 0.1
+    },
     "speciesID": [
       "0",
       "1"

@@ -13,6 +13,16 @@ function getSpeciesByID(specieIDs) {
         .filter(specie => specieIDs.includes(specie["specieId"]))
 }
 
+function randomWeather(climate) {
+    const randomNum = Math.random()
+    var weatherList = []
+    Object.keys(climate).map(weather => weatherList.push([weather, climate[weather], randomNum]))
+    for (let i = 1; i < weatherList.length; i++) {
+        weatherList[i][1] += weatherList[i - 1][1]
+    }
+    return weatherList.find(value => value[1] > value[2])[0]
+}
+
 /** This function is used to get the location data from Location.json based on given Location ID.
  *
  * @param {String} location_id
@@ -73,6 +83,7 @@ function tempCSV2dateTempList(tempCSV) {
 
 module.exports = {
     tempCSV2dateTempList,
+    randomWeather,
     gameLogic,
     getSpeciesByID,
     getLocationByID,

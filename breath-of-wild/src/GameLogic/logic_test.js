@@ -15,16 +15,18 @@ function sleep(ms) {
     });
 }
 
-async function logic_test(matrix, location_id) {
+async function logic_test(plantMatrix, landMatrix, location_id) {
 
     const run = 400000
     var cycle = 0
     let logMode = false
 
-    dateTemp = GameLogic.tempCSV2dateTempList(Temperature)
+    const dateTemp = GameLogic.tempCSV2dateTempList(Temperature)
 
     const locationData = GameLogic.getLocationByID(location_id, Location);
     const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])
+    const climate = locationData["weatherList"]
+
     var availableSpecies
 
     // const testPlantPos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
@@ -32,26 +34,31 @@ async function logic_test(matrix, location_id) {
 
     // console.log(locationData)
     // console.log(locationSpecies)
-    testPlantPos.map(coordinate => matrix[coordinate[0]][coordinate[1]] = new Plant.Plant(coordinate, locationSpecies[0]))
+    testPlantPos.map(coordinate => plantMatrix[coordinate[0]][coordinate[1]] = new Plant.Plant(coordinate, locationSpecies[0]))
 
     let totalBioMass;
 
     while (cycle < run) {
+
+        const currentWeather = GameLogic.randomWeather(climate)
         totalBioMass = 0
+
         var currentTemp = {minTemp: dateTemp[cycle % 365 + 1][1], maxTemp: dateTemp[cycle % 365 + 1][2]}
-        matrix.map(row => row.map(function (colum) {
+
+        plantMatrix.map(row => row.map(function (colum) {
             if (colum instanceof Plant.Plant) {
-                matrix = colum.frameLogic(matrix, currentTemp, logMode)
+                plantMatrix = colum.frameLogic(plantMatrix, landMatrix[colum.yCord][colum.xCord], currentTemp, logMode)
                 totalBioMass += colum.getBioMass()
             }
         }))
         if (cycle % 1 === 0 && cycle > 0) {
             logMode = true
-            consoleMatrix = Board.outputMatrix(matrix) + "Counter:" + cycle + ' | TotalBioMass: ' + totalBioMass + "\n"
+            consoleMatrix = Board.outputMatrix(plantMatrix) + "Counter:" + cycle + ' | TotalBioMass: ' + totalBioMass + "\n"
             console.log(consoleMatrix)
             console.log(currentTemp)
-            totalBioMass = GameLogic.getTotalBioMass(matrix)
-            availableSpecies = await updateAvailableSpecies(locationSpecies, matrix, totalBioMass)
+            console.log(currentWeather)
+            totalBioMass = GameLogic.getTotalBioMass(plantMatrix)
+            availableSpecies = await updateAvailableSpecies(locationSpecies, plantMatrix, totalBioMass)
             // console.log(availableSpecies.length)
             // availableSpecies.map(specie => console.log(specie["commonName"]))
         }
@@ -68,7 +75,7 @@ printMatrix(a)
 console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadRange)))*/
 
 
-logic_test(Board.blankMatrix(10, 10), "0")
+logic_test(Board.blankMatrix(10, 10), Board.blankMatrix(10, 10), "0")
 
 /*const locationData = GameLogic.getLocationByID("0", Location);
 const locationSpecies = GameLogic.getSpeciesByID(locationData["speciesID"])

@@ -24,7 +24,10 @@
         "minWind": 0,
         "maxWind": 99
       },
-      "terrainID": 0
+      "terrainID": [
+        null,
+        0
+      ]
     },
     "info": {
       "species": "testSpecies",
@@ -57,7 +60,10 @@
         "minWind": 0,
         "maxWind": 99
       },
-      "terrainID": 0
+      "terrainID": [
+        null,
+        0
+      ]
     },
     "info": {
       "species": "testSpecies",
