@@ -13,6 +13,11 @@ function getSpeciesByID(specieIDs) {
         .filter(specie => specieIDs.includes(specie["specieId"]))
 }
 
+/** This function is used to generate random weather with given weight.
+ *
+ * @param climate{Object} e.g. {sunny: 0.1, cloud: 0.8, rain: 0.1}
+ * @returns {string} weather
+ */
 function randomWeather(climate) {
     const randomNum = Math.random()
     var weatherList = []
