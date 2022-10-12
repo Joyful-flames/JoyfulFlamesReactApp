@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function bush_davallia_pyxidata() {
+export default function BackButton() {
     return (
         <>
             <button className="back"> ← </button>

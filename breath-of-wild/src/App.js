@@ -43,7 +43,6 @@ function App() {
               <MDBInput wrapperClass='mb-4 w-100' label='Password' id='formControlLg' type='password' size="lg"/>
 
               <MDBCheckbox name='flexCheck' id='flexCheckDefault' className='mb-4' label='Remember password' />
-
               <MDBBtn size='lg'>
                 Login
               </MDBBtn>
@@ -68,7 +67,12 @@ function App() {
       </MDBRow>
 
     </MDBContainer>
+
+
   );
 }
 
+
+
 export default App;
+
