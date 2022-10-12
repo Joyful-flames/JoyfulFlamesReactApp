@@ -2,10 +2,6 @@ const Board = require("./Board")
 
 const growthSpeedModifier = 1
 
-
-/** Plant class
- *
- */
 class Plant {
     function
 
@@ -24,6 +20,7 @@ class Plant {
         this.plantSpecie = plantSpecie
         this.stage = stage
         this.percentage = percentage
+        this.witheredCounter = 0
 
         // specie property
         this.specieProperty = this.plantSpecie["property"]
@@ -97,7 +94,6 @@ class Plant {
         var lowTierPos = []
         var sameTierPos = []
         var highTierPos = []
-
 
         coordinates.map(function (coordinate) {
             var cell = matrix[coordinate[0]][coordinate[1]]
@@ -284,10 +280,8 @@ class Plant {
         this.mature = this.isMature()
         this.crowed = this.isCrowed(crowedRangeStats, crowedRangePos.length)
 
-        if (this.crowed) {
-            _plantMatrix[this.yCord][this.xCord] = null
-            return _plantMatrix
-
+        if (this.crowed || (this.percentage <= 0 && this.stage <= 0)) {
+            this.witheredCounter ++
         } else if (this.mature) {
             // check if crowed range is same as spread range, use simplified actions if there are same
             if (this.crowedRange === this.spreadRange) {
@@ -298,16 +292,10 @@ class Plant {
                 spreadRangeStats = this.rangeStats(_plantMatrix, spreadRangePos)
             }
             const availablePos = spreadRangeStats["nullPos"].concat(spreadRangeStats["lowTierPos"])
-            //console.log(spreadRangeStats)
-
-            // console.log(this.coordinate)
-            // console.log(spreadRangeStats)
 
             return this.multiSpread(_plantMatrix, availablePos)
-        }
-
-        if (logMode) {
-            // console.log(this.name, "in", this.coordinate, "availablePos:", availablePos)
+        } else {
+            this.witheredCounter = 0
         }
 
         return _plantMatrix

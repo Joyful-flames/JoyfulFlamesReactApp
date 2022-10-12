@@ -33,8 +33,6 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
     // const testPlantPos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
     const testPlantPos = [[4, 4]]
 
-    // console.log(locationData)
-    // console.log(locationSpecies)
     testPlantPos.map(coordinate => plantMatrix[coordinate[0]][coordinate[1]] = new Plant.Plant(coordinate, locationSpecies[0]))
 
     let totalBioMass;
@@ -49,6 +47,9 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
         plantMatrix.map(row => row.map(function (colum) {
             if (colum instanceof Plant.Plant) {
                 plantMatrix = colum.frameLogic(plantMatrix, landMatrix[colum.yCord][colum.xCord], currentTemp, logMode)
+                if (colum.witheredCounter > 5) {
+                    plantMatrix[colum.yCord][colum.xCord] = null
+                }
                 totalBioMass += colum.getBioMass()
             }}))
 
@@ -69,16 +70,4 @@ async function logic_test(plantMatrix, landMatrix, location_id) {
     }
 }
 
-/*const a = Board.blankMatrix(5,5)
-Board.placePlantOnMatrix(a,[1,1], new Plant.Plant(1,1, Species[0]))
-printMatrix(a)
-console.log(a[1][1].rangeStats(a,a[1][1].getCircleCordByCenter(a,a[1][1].spreadRange)))*/
-
-
 logic_test(Board.blankMatrix(10, 10), Board.blankMatrix(10, 10), "0")
-
-/*const locationData = GameLogic.getLocationByID("0", Location);
-const locationSpecies = GameLogic.getSpeciesByID(locationData["   "])
-
-console.log(locationSpecies[0]["property"]["tier"])
-console.log(locationSpecies.filter(specie => specie["property"]["tier"] === 0))*/
