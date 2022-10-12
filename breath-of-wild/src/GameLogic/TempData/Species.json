@@ -70,5 +70,113 @@
       "name": "testName",
       "description": "EMPTY_INFO"
     }
+  },
+  "2": {
+    "specieId": "2",
+    "commonName": "Bog moss",
+    "property": {
+      "tier": 0,
+      "matureStage": 0,
+      "maturePercentage": 99,
+      "growthRate": 10,
+      "crowedRange": 1,
+      "crowedRate": 1,
+      "spreadRange": 1,
+      "waterConsume": 0,
+      "nutritionConsume": 0
+    },
+    "conditions": {
+      "temp": {
+        "minTemp": 20,
+        "suitableLowTemp": 23,
+        "suitableHighTemp": 28,
+        "maxTemp": 30
+      },
+      "wind": {
+        "minWind": 0,
+        "maxWind": 99
+      },
+      "terrainID": [
+        null,
+        0
+      ]
+    },
+    "info": {
+      "species": "Fluviatilis",
+      "name": "Mayaca",
+      "description": "Mayaca fluviatilis belongs to the monogeneric monocot family Mayacaceae. It is a perennial herbaceous submerged plant and commonly known as stream bog moss. In Mayaca, leaves are simple, small, sessile and spirally arranged. Flowers are pink, solitary and bisexual, the corolla and stamens are trimerous (Lourteig, 1952; De Carvalho et al., 2009). "
+    }
+  },
+    "3": {
+    "specieId": "3",
+    "commonName": "cockatoo grass",
+    "property": {
+      "tier": 1,
+      "matureStage": 0,
+      "maturePercentage": 99,
+      "growthRate": 5,
+      "crowedRange": 1,
+      "crowedRate": 1,
+      "spreadRange": 1,
+      "waterConsume": 0,
+      "nutritionConsume": 0
+    },
+    "conditions": {
+      "temp": {
+        "minTemp": 20,
+        "suitableLowTemp": 23,
+        "suitableHighTemp": 28,
+        "maxTemp": 30
+      },
+      "wind": {
+        "minWind": 0,
+        "maxWind": 99
+      },
+      "terrainID": [
+        null,
+        0
+      ]
+    },
+    "info": {
+      "species": "Semialata",
+      "name": "Alloteropsis ",
+      "description": "Alloteropsis semialata, known commonly as black seed grass, cockatoo grass, donkersaad gras, swartsaadgras, tweevingergras, and isi quinti, is a perennial grass distributed across much of tropical and subtropical Africa, Asia and Australia, as well as Papuasia and Madagascar."
+    }
+  },
+  "4": {
+    "specieId": "4",
+    "commonName": "cockatoo grass",
+    "property": {
+      "tier": 2,
+      "matureStage": 2,
+      "maturePercentage": 50,
+      "growthRate": 5,
+      "crowedRange": 1,
+      "crowedRate": 1,
+      "spreadRange": 1,
+      "waterConsume": 0,
+      "nutritionConsume": 0
+    },
+    "conditions": {
+      "temp": {
+        "minTemp": 20,
+        "suitableLowTemp": 23,
+        "suitableHighTemp": 28,
+        "maxTemp": 30
+      },
+      "wind": {
+        "minWind": 0,
+        "maxWind": 99
+      },
+      "terrainID": [
+        null,
+        0
+      ]
+    },
+    "info": {
+      "species": "Semialata",
+      "name": "Alloteropsis ",
+      "description": "Alloteropsis semialata, known commonly as black seed grass, cockatoo grass, donkersaad gras, swartsaadgras, tweevingergras, and isi quinti, is a perennial grass distributed across much of tropical and subtropical Africa, Asia and Australia, as well as Papuasia and Madagascar."
+    }
   }
 }

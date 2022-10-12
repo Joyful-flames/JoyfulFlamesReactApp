@@ -13,6 +13,7 @@ class Plant {
      * @param {Number} percentage
      */
     constructor(coordinate, plantSpecie, stage = 0, percentage = 0) {
+
         // basic stats
         this.coordinate = coordinate
         this.xCord = coordinate[1]
