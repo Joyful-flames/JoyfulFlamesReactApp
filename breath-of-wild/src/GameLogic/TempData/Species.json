@@ -1,0 +1,68 @@
+{
+  "0": {
+    "specieId": "0",
+    "commonName": "TestComName",
+    "property": {
+      "tier": 0,
+      "matureStage": 0,
+      "maturePercentage": 99,
+      "growthRate": 10,
+      "crowedRange": 1,
+      "crowedRate": 1,
+      "spreadRange": 1,
+      "waterConsume": 0,
+      "nutritionConsume": -1
+    },
+    "conditions": {
+      "temp": {
+        "minTemp": -20,
+        "suitableLowTemp": -15,
+        "suitableHighTemp": 30,
+        "maxTemp": 50
+      },
+      "wind": {
+        "minWind": 0,
+        "maxWind": 99
+      },
+      "terrainID": 0
+    },
+    "info": {
+      "species": "testSpecies",
+      "name": "testName",
+      "description": "EMPTY_INFO"
+    }
+  },
+  "1": {
+    "specieId": "1",
+    "commonName": "TestComName2",
+    "property": {
+      "tier": 1,
+      "matureStage": 0,
+      "maturePercentage": 99,
+      "growthRate": 1,
+      "crowedRange": 1,
+      "crowedRate": 1,
+      "spreadRange": 1,
+      "waterConsume": 0,
+      "nutritionConsume": -1
+    },
+    "conditions": {
+      "temp": {
+        "minTemp": -20,
+        "suitableLowTemp": -15,
+        "suitableHighTemp": 30,
+        "maxTemp": 50
+      },
+      "wind": {
+        "minWind": 0,
+        "maxWind": 99
+      },
+      "terrainID": 0
+    },
+    "info": {
+      "species": "testSpecies",
+      "name": "testName",
+      "description": "EMPTY_INFO"
+    }
+  }
+}
