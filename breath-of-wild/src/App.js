@@ -4,7 +4,7 @@ import AlloteropsisSemialata from './components/Plants/AlloteropsisSemialata';
 import DavalliaPyxidata from './components/Plants/DavalliaPyxidata'
 import EucalyptusArgophloia from './components/Plants/EucalyptusArgophloia';
 import EucalyptusTereticornis from './components/Plants/EucalyptusTereticornis';
-import Mangroves from './components/Plants/Mangroves';
+import RhizophoraStylosa from './components/Plants/RhizophoraStylosa';
 import MayacaFluviatilis from './components/Plants/MayacaFluviatilis'
 import MelaleucaViminalis from './components/Plants/MelaleucaViminalis';
 
@@ -18,7 +18,7 @@ export default class App extends Component{
         <DavalliaPyxidata></DavalliaPyxidata>
         <EucalyptusTereticornis></EucalyptusTereticornis>
         <EucalyptusArgophloia></EucalyptusArgophloia>
-        <Mangroves></Mangroves>
+        <RhizophoraStylosa></RhizophoraStylosa>
         <MayacaFluviatilis></MayacaFluviatilis>
         <MelaleucaViminalis></MelaleucaViminalis>
 
