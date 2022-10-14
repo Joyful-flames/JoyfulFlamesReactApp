@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Avatar, Space, Button, Typography } from '@douyinfe/semi-ui';
 import { Collapse } from '@douyinfe/semi-ui';
 
-export default class MayacaFluviatilis extends Component {
+export default class CampylopusIntroflexus extends Component {
   
   render() {
     const { Meta } = Card;
