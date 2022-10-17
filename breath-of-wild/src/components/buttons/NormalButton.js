@@ -4,7 +4,7 @@ import React from "react";
 export default function NormalButton( {imageUrl} ) {
     return (
         <>
-            <button className="contact"> <img src={imageUrl} /> </button>
+            <button className="contact"> <img src={imageUrl} alt=""/> </button>
         </>
     );
 }
