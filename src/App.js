@@ -21,16 +21,6 @@ extend({ DragControls });
 const positionsNorth = data.north;
 const positionsSouth = data.south;
 
-export const RedgumtreePlants = (props) => {
-    let indexSet = props.info; // we plan two redgumtrees by using this render, with default position
-    return indexSet.map((value, index) => <Dragable><Redgumtree key={index} position={[value.x, 3, value.y]} /></Dragable>);
-}    
-
-export const GrassPlants = (props) => { 
-    let indexSet = props.info;
-    return indexSet.map((value, index) => <Grass key={index} position={[value.x, 2.2, value.y]} scale={ 0.05 } />);
-}
-
 export const MouseOperator = (props) => { 
     const { scene, camera } = useThree();
     let signal = props.info[0];
@@ -47,7 +37,7 @@ export const MouseOperator = (props) => {
         vector.unproject(camera);
         var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
         var intersects = raycaster.intersectObjects(scene.children);
-        if (signal == true) { 
+        if (signal === true) { 
             if (intersects.length > 0) {
                 var selected = intersects[0];
                 setNewPlantPos({ "x": selected.point.x, "y": selected.point.z });
@@ -56,78 +46,80 @@ export const MouseOperator = (props) => {
     }
 }
 
-export const PlantRender = (props) => { 
-
-    const { scene } = useThree();
-    let plantType = props.info.type;
-    let plantPos = props.info.pos;
-    var loader = new GLTFLoader();
-    let plantCommand = props.info.cmd;
-    let plants = {
-        "grass": {
-            "growthTime": 5,
-            "stage": null,
-            "diffusion": 4
-        }
-    };
-
-    let previousPos = { "x": "", "y": "" };
-}
-
 export const GrassLoader = (props) => { 
-    let plantType = props.info.type;
-    let plantPosList = props.info.posList;
-    let plantCommand = props.info.cmd;
-    return (plantPosList.map((value, index) => <Grass key={index} position={[value.x, 3, value.y]} scale={ 0.1 } />));
+    let plantPosList = props.info;
+    return (plantPosList.map((value, index) => <Grass key={index} position={[value.x, 2.2, value.y]} scale={ 0.1 } />));
 }
 
+export const GrassDiffLoader = (props) => {
+    let plantPosList = props.info;
+    return (plantPosList.map((value, index) => <Grass key={index} position={[value.x, 2.2, value.y]} scale={0.1} />));
+}
 
+export const RedLoader = (props) => { 
+    let redPostList = props.info;
+    return (redPostList.map((value, index) => <Redgumtree0 key={index} position={[value.x, 3, value.y]} scale={0.1} />));
+}
 
-export const Dragable = (props) => {
+export const RedDiffLoader = (props) => { 
+    let redDiffPosList = props.info;
+    return (redDiffPosList.map((value, index) => <Redgumtree0 key={index} position={[value.x, 3, value.y]} scale={0.1} />));
+}
 
-    const { camera, gl, scene } = useThree();
-    const [children, setChildren] = useState([]);
-    const groupRef = useRef();
-    const controlsRef = useRef();
+export const Timer = (props) => { 
+    let type = props.info.type;
+    let pos = props.info.pos;
+    const getDiffPos = (data) => { 
+        props.info.func(data);
+    }
+    
+    if (type === "grass") { 
+        setTimeout(() => {
+            getDiffPos({ "pos": pos, "type": "grass"});
+        }, 5000);
+    }
 
+    if (type === "red") { 
+        setTimeout(() => {
+            getDiffPos({ "pos": pos, "type": "red" });
+        }, 5000);
+    }
 
-    useEffect(() => {
-        setChildren(groupRef.current.children);
-    }, []);
-
-    // listen event of mouse on 3D object
-    // because each time when we want to move each 3d object, we need to close and reopen the orbit control, so we should write two useEffect hooks to control them separately.
-    // hoveron -> trigger when mouse move one a 3D object or some of it's children
-    // hoveroff -> triggers when mouse move out of a 3D obkect 
-    useEffect(() => {
-        controlsRef.current.addEventListener("hoveron", (e) => {
-            scene.orbitControls.enabled = false;
-        });
-        controlsRef.current.addEventListener("hoveroff", (e) => {
-            scene.orbitControls.enabled = true;
-        });
-    }, [children]);
-
-    return (
-        <group ref={ groupRef }>
-            <dragControls args={[children, camera, gl.domElement]} ref={ controlsRef } />
-            {props.children}
-        </group>
-    );
-};
+}
 
 function App() {
 
     let [newPlantType, setNewPlantType] = useState(null);
     let [signal, setSignal] = useState(false);
     let [newPlantPos, setNewPlantPos] = useState({ "x": 0, "y": 0 });
-    let [newPlantInfo, setNewPlantInfo] = useState({ "type": "", "pos": "", "cmd": "" });
+    
     let [grassList, setGrassList] = useState([]);
+    let [grassDiffList, setGrassDiffList] = useState([]);
     let [plantList, setPlantList] = useState([]);
+    let [newPlantData, setNewPlantData] = useState([]);
+   
+    let [redList, setRedList] = useState([]);
+    let [redDiffList, setRedDiffList] = useState([]);
     
     const selectNewPlantPos = (newPos) => { 
         setNewPlantPos(newPos);
-        // console.log(newPlantPos);
+    }
+
+    const getDiffPos = (data) => {
+        let pos = data.pos;
+        let type = data.type;
+        let seeds = applyForSeeds(pos);
+        console.log(seeds);
+        if (type === "grass") {
+            for (let i = 0; i < seeds.length; i++) {
+                setGrassDiffList([...grassDiffList, seeds[i]]);
+            }
+        } else if (type === "red") { 
+            for (let i = 0; i < seeds.length; i++) {
+                setRedDiffList([...redDiffList, seeds[i]]);
+            }
+        }
+
     }
 
     // invaild position judgement
@@ -194,7 +186,7 @@ function App() {
     }
 
 
-    const applyForSeeds = (position) => { // here is the function that plant can spreat seeds
+    const applyForSeeds = (position, num) => { // here is the function that plant can spreat seeds
 
         let x = position.x;
         let y = position.y;
@@ -210,7 +202,7 @@ function App() {
         let leftSeed3 = { "x": x - 0.4, "y": y };
         let rightSeed1 = { "x": x + 0.2, "y": y };
         let rightSeed2 = { "x": x + 0.3, "y": y };
-        let rightSeed3 = { "x": x + 0.4, "y": y }
+        let rightSeed3 = { "x": x + 0.4, "y": y };
 
         let finalSeeds = [upperSeed1, upperSeed2, upperSeed3, lowerSeed1, lowerSeed2, lowerSeed3, leftSeed1, leftSeed2, leftSeed3, rightSeed1, rightSeed2, rightSeed3];
 
@@ -227,9 +219,19 @@ function App() {
         let validPos = terrainJudgement(newPlantPos);
         
         if (validPos == true) { 
-            setGrassList([...grassList, newPlantPos]);
-            console.log(grassList);
-            setNewPlantInfo({ "type": newPlantType, "posList": grassList, "cmd": "new" });
+            if (newPlantType === "grass") {
+                setGrassList([...grassList, newPlantPos]);
+                setPlantList([...plantList, newPlantPos]);
+                console.log(grassList);
+                // setNewGrassInfo({ "posList": grassList });
+                setNewPlantData({ "type": newPlantType, "pos": newPlantPos, "func": getDiffPos });
+            } else if (newPlantType === "red") { 
+                setRedList([...redList, newPlantPos]);
+                setPlantList([...plantList, newPlantPos]);
+                console.log(redList);
+                setNewPlantData({ "type": newPlantType, "pos": newPlantPos, "func": getDiffPos });
+            }
+            
         }
         
     }, [newPlantPos]);
@@ -243,7 +245,15 @@ function App() {
                     setSignal(true);
                     setNewPlantType("grass");
                 }
-             }}>Grass</button>
+            }}>Grass</button>
+            <button id='red' onClick={() => { 
+                if (signal === true) {
+                    setSignal(false);
+                } else { 
+                    setSignal(true);
+                    setNewPlantType("red");
+                }
+            }}>Redgum Tree</button>
         </div><Canvas style={{ height: "100vh", width: "100vw", background: "black" }}
             camera={{ position: [0, 5, 5], fov: 45, near: 1 }}>
             <OrbitControls />
@@ -254,7 +264,11 @@ function App() {
             <Redgumtree position={[1, 3, 1]} />
             <Ocean position={[0, 2, 0]} />
             <MouseOperator info={[signal, selectNewPlantPos]}></ MouseOperator>
-            <GrassLoader info={newPlantInfo} />
+            <GrassLoader info={ grassList } />
+            <Timer info={ newPlantData } />
+            <GrassDiffLoader info={grassDiffList} />
+            <RedLoader info={redList} />
+            <RedDiffLoader info={redDiffList} />
         </Canvas></>
     );
 }
