@@ -1,10 +1,11 @@
-import { BotanicalGardenDirectory } from '../pages/botanicalGardenDirectory'
+import BotanicalGardenDirectory from "./botanicalGardenDirectory";
+import BotanicalGardenDetail from "./botanicalGrardenDetail";
+
 
 function Library() {
     return (
         <div className="App">
             <BotanicalGardenDirectory></BotanicalGardenDirectory>
-            {/* <NewSpecie specieId={"1"}></NewSpecie> */}
         </div>
     );
 }

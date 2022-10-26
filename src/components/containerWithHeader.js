@@ -7,7 +7,7 @@ import "./containerWithHeader.css";
  * @param  {string} communityLink - the link of the community page
  */
 
-export default function containerWithHeader({ title, leftLinkHandler, communityLinkHandler, children }) {
+export default function ContainerWithHeader({ title, leftLinkHandler, communityLinkHandler, children }) {
 
   function backArrowHandler() {
     leftLinkHandler()

@@ -9,14 +9,11 @@ import { Ocean } from './models/maps/Ocean';
 import data from './data/brisbaneMapData/BrisbaneMap.json';
 import { useEffect, Card, useRef, useState, setState, preState, state } from 'react';
 import { Grass } from './models/plants/Grass';
-import { DragControls } from "three/examples/jsm/controls/DragControls";
-import { extend} from "@react-three/fiber";
 import React from "react";
 import * as THREE from "three";
-import { Vector3 } from 'three';
-import GLTFLoader from 'gltfjsx/src/utils/glftLoader';
-
-extend({ DragControls });
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Library from "./pages/library.js"
+import { Link } from 'react-router-dom';
 
 const positionsNorth = data.north;
 const positionsSouth = data.south;
@@ -89,6 +86,7 @@ export const Timer = (props) => {
 
 function App() {
 
+    
     let [newPlantType, setNewPlantType] = useState(null);
     let [signal, setSignal] = useState(false);
     let [newPlantPos, setNewPlantPos] = useState({ "x": 0, "y": 0 });
@@ -254,6 +252,12 @@ function App() {
                     setNewPlantType("red");
                 }
             }}>Redgum Tree</button>
+            <Router>
+            <Routes>
+            <Route path='./pages/library.js' component={ Library } />
+                </Routes>
+                <Link to="./pages/library.js">Go to Library</Link>
+            </Router>
         </div><Canvas style={{ height: "100vh", width: "100vw", background: "black" }}
             camera={{ position: [0, 5, 5], fov: 45, near: 1 }}>
             <OrbitControls />

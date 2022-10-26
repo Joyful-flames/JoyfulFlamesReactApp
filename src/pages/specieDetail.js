@@ -76,7 +76,7 @@ export default function SpeiceDetail() {
                 <h1 className="content">{getSpecieGenericName(specieId)}</h1>
             </div>
 
-            <img className="image" src="/images/specieImage/2.png"></img>
+            <img className="image" src="/images/specieImage/${specieID}.png"></img>
 
             <div className="specie-detail-introduction">
                 <p className="specie-detail-description">
