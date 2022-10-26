@@ -6,7 +6,9 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export function Redgumtree0(props) {
-  const { nodes, materials } = useGLTF('/models/plants/Redgumtree0.glb')
+    const { nodes, materials } = useGLTF('/models/plants/Redgumtree0.glb');
+    const currentPositon = nodes.position;
+    console.log(currentPositon);
   return (
     <group {...props} dispose={null}>
       <group position={[-0.98, 0, -1.01]}>

@@ -7,31 +7,19 @@ import { Redgumtree } from './models/plants/Redgumtree';
 import { Redgumtree0 } from './models/plants/Redgumtree0';
 import { Ocean } from './models/maps/Ocean';
 import data from './data/brisbaneMapData/BrisbaneMap.json';
-import { useEffect, Card, useRef, useState } from 'react';
+import { useEffect, Card, useRef, useState, setState, preState, state } from 'react';
 import { Grass } from './models/plants/Grass';
 import { DragControls } from "three/examples/jsm/controls/DragControls";
 import { extend} from "@react-three/fiber";
 import React from "react";
-import {Link} from 'react-router-dom'
+import * as THREE from "three";
+import { Vector3 } from 'three';
+import GLTFLoader from 'gltfjsx/src/utils/glftLoader';
+
 extend({ DragControls });
 
 const positionsNorth = data.north;
 const positionsSouth = data.south;
-// temporarily useless
-let standardPositionsXNorth = [];
-let standardPositionsXSouth = []; 
-let standardPositionsYNorth = [];
-let standardPositionsYSouth = [];
-let highestNorth = 0;
-let lowestNorth = 0;
-let leftMostNorth = 0;
-let rightMostNorth = 0;
-let rightMostSouth = 0;
-let lowestSouth = 0;
-// a list stores all the plants
-let RedGumtreePlantList = [];
-let GrassPlantList = [];
-let nextPlantPosition = [];
 
 export const RedgumtreePlants = (props) => {
     let indexSet = props.info; // we plan two redgumtrees by using this render, with default position
@@ -43,7 +31,59 @@ export const GrassPlants = (props) => {
     return indexSet.map((value, index) => <Grass key={index} position={[value.x, 2.2, value.y]} scale={ 0.05 } />);
 }
 
-export const  Dragable = (props) => {
+export const MouseOperator = (props) => { 
+    const { scene, camera } = useThree();
+    let signal = props.info[0];
+    const setNewPlantPos = (newPos) => { 
+        props.info[1](newPos);
+    }
+    document.onmousedown = (event) => { 
+        event.preventDefault();
+        var vector = new THREE.Vector3(); // 3d index object
+        vector.set(
+            (event.clientX / window.innerWidth) * 2 - 1,
+            - (event.clientY / window.innerHeight) * 2 + 1,
+            0.5);
+        vector.unproject(camera);
+        var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+        var intersects = raycaster.intersectObjects(scene.children);
+        if (signal == true) { 
+            if (intersects.length > 0) {
+                var selected = intersects[0];
+                setNewPlantPos({ "x": selected.point.x, "y": selected.point.z });
+            }
+        }
+    }
+}
+
+export const PlantRender = (props) => { 
+
+    const { scene } = useThree();
+    let plantType = props.info.type;
+    let plantPos = props.info.pos;
+    var loader = new GLTFLoader();
+    let plantCommand = props.info.cmd;
+    let plants = {
+        "grass": {
+            "growthTime": 5,
+            "stage": null,
+            "diffusion": 4
+        }
+    };
+
+    let previousPos = { "x": "", "y": "" };
+}
+
+export const GrassLoader = (props) => { 
+    let plantType = props.info.type;
+    let plantPosList = props.info.posList;
+    let plantCommand = props.info.cmd;
+    return (plantPosList.map((value, index) => <Grass key={index} position={[value.x, 3, value.y]} scale={ 0.1 } />));
+}
+
+
+
+export const Dragable = (props) => {
 
     const { camera, gl, scene } = useThree();
     const [children, setChildren] = useState([]);
@@ -78,52 +118,19 @@ export const  Dragable = (props) => {
 
 function App() {
 
-    const newPlant = [];
-    let [plantNum, setPlantNum] = useState(0);
+    let [newPlantType, setNewPlantType] = useState(null);
+    let [signal, setSignal] = useState(false);
+    let [newPlantPos, setNewPlantPos] = useState({ "x": 0, "y": 0 });
+    let [newPlantInfo, setNewPlantInfo] = useState({ "type": "", "pos": "", "cmd": "" });
+    let [grassList, setGrassList] = useState([]);
+    let [plantList, setPlantList] = useState([]);
     
-    // temporary useless
-    const getStandardIndexX = (positions, standardSet) => { 
-        positions.forEach((value) => {
-            standardSet.push(value.x);
-        });
-        standardSet.sort();
+    const selectNewPlantPos = (newPos) => { 
+        setNewPlantPos(newPos);
+        // console.log(newPlantPos);
     }
 
-    const getStandardIndexY = (indexXSet, positions, standardSet) => { 
-        indexXSet.forEach((valueX) => {
-            let indexY = [];
-            positions.forEach((value) => {
-                if (value.x === valueX) {
-                    indexY.push(value.y);
-                }
-            });
-            // no repeat index
-            let newIndexY = [];
-            for (let i = 0; i < indexY.length; i++) {
-                if (newIndexY.lastIndexOf(indexY[i]) === -1) {
-                    newIndexY.push(indexY[i]);
-                }
-            }
-
-            standardSet.push(newIndexY);
-        });
-    }
-
-    const getExtremeYIndex = (target, standardSet) => {
-        let all = [];
-        standardSet.forEach((array) => {
-            array.forEach((val) => {
-                all.push(val);
-            })
-        });
-
-        if (target === "Highest") {    
-            return Math.min(...all);
-        } else if (target === "Lowest") { 
-            return Math.max(...all);
-        }
-    }
-
+    // invaild position judgement
     const isRayIntersectsSegment = (x, y, startX, startY, endX, endY) => { 
         
         if (startY === endY) { // Exclude the cases where the ray is parallel and coincident, and the end points of the line segment coincide
@@ -164,7 +171,6 @@ function App() {
             }
         }
 
-        console.log(sinsc);
         if (sinsc/ 2 % 2 === 1) {
             return true;
         } else {
@@ -186,13 +192,6 @@ function App() {
             }
         }
     }
-
-    useEffect(() => {
-        GrassPlantList.push({ "x": 5, "y": 5 });
-        RedGumtreePlantList.push({ "x": 0, "y": 0 });
-        RedGumtreePlantList.push({ "x": 3, "y": 3 });
-        setPlantNum(plantNum += 2);
-    }, []);
 
 
     const applyForSeeds = (position) => { // here is the function that plant can spreat seeds
@@ -225,33 +224,37 @@ function App() {
     }
 
     useEffect(() => {
+        let validPos = terrainJudgement(newPlantPos);
         
-        let newGrass = GrassPlantList[GrassPlantList.length - 1];
-        let grassSeeds = applyForSeeds(newGrass);
-            
-        for (let i = 0; i < grassSeeds.length; i++) {
-            GrassPlantList.push(grassSeeds[i]);
+        if (validPos == true) { 
+            setGrassList([...grassList, newPlantPos]);
+            console.log(grassList);
+            setNewPlantInfo({ "type": newPlantType, "posList": grassList, "cmd": "new" });
         }
         
-        let lastPlant = GrassPlantList[GrassPlantList.length - 1];
-        GrassPlantList.push({ "x": lastPlant.x, "y": lastPlant.y });
-        
-    }, [plantNum]);
+    }, [newPlantPos]);
 
     return (
         <><div>
-            
+            <button id='grass' onClick={() => { 
+                if (signal == true) {
+                    setSignal(false);
+                } else { 
+                    setSignal(true);
+                    setNewPlantType("grass");
+                }
+             }}>Grass</button>
         </div><Canvas style={{ height: "100vh", width: "100vw", background: "black" }}
             camera={{ position: [0, 5, 5], fov: 45, near: 1 }}>
-            {/* <OrbitControls /> */}
+            <OrbitControls />
             <pointLight position={[10, 5, 10]} />
             <Stars />
             <BrisbaneMap position={[0, 0, 0]} />
-            <RedgumtreePlants info={RedGumtreePlantList} />
-            <GrassPlants info={GrassPlantList} />
-            <Grass position={[4, 2.2, 4]} scale={0.05} /> // first we put a new grass here
-            // first we put a new grass here
+            <Redgumtree position={[4, 3, 4]} />
+            <Redgumtree position={[1, 3, 1]} />
             <Ocean position={[0, 2, 0]} />
+            <MouseOperator info={[signal, selectNewPlantPos]}></ MouseOperator>
+            <GrassLoader info={newPlantInfo} />
         </Canvas></>
     );
 }
